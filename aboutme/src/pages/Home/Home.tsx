@@ -1,4 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
+import styles from "./Home.module.css";
+import '../../../globals.css';
+import GlassCard from '../../components/GlassCard';
 
 // Ball info
 const BALL_RADIUS = 0.075; // metres
@@ -7,8 +10,6 @@ const METER_FACTOR = 1000;
 const DIAMETER_PX = BALL_RADIUS * 2 * METER_FACTOR;
 const BALL_AREA = Math.PI * (BALL_RADIUS ** 2);
 const BALL_MASS = 1.5;
-const SUN_COLOR = "#dcf9f5";
-const MOON_COLOR = "#ffb32c";
 
 // Gravity
 const GRAVITY = 9.0;
@@ -22,9 +23,9 @@ const DRAG_COEFFICIENT = 0.5;
 
 
 function Home() {
+  const AIR_HEIGHT = (window.innerHeight * 0.7)
   const [x, setX] = useState<number>(0);
   const [y, setY] = useState<number>(0);
-  const [bgColor, setBgColor] = useState<typeof SUN_COLOR | typeof MOON_COLOR>("white");
   const [dragging, setDragging] = useState<boolean>(false);
   const [velocity, setVelocity] = useState<number>(0);
   const [percentSubmerged, setPercentSubmerged] = useState(0);
@@ -38,10 +39,10 @@ function Home() {
   useEffect(() => {
     yRef.current = y;
     // change submerged percentage
-    if (yRef.current + DIAMETER_PX >= (window.innerHeight / 2)) {
+    if (yRef.current + DIAMETER_PX >= AIR_HEIGHT) {
       const heightSubmerged = Math.min(
         DIAMETER_PX,
-        yRef.current + DIAMETER_PX - (window.innerHeight / 2)
+        yRef.current + DIAMETER_PX - AIR_HEIGHT
       );
       const percent = Math.abs(heightSubmerged / DIAMETER_PX) * 100;
       setPercentSubmerged(percent);
@@ -58,7 +59,7 @@ function Home() {
     const animate = () => {
       if (!dragging) {
         const DELTA_TIME = 0.16;
-        const isSubmerged = (yRef.current + (BALL_RADIUS * METER_FACTOR * 2)) >= (window.innerHeight / 2);
+        const isSubmerged = (yRef.current + (BALL_RADIUS * METER_FACTOR * 2)) >= AIR_HEIGHT;
 
         const forceGravity = BALL_MASS * GRAVITY;
         const buoyantForce = FLUID_DENSITY * GRAVITY * VOLUME;
@@ -94,36 +95,46 @@ function Home() {
   }, [dragging])
 
   return (
-    <div style={styles.container}>
-      <div
-        style={styles.ballContainer}
-      >
-        <div
-          onMouseDown={() => setDragging(true)}
-          onMouseUp={() => setDragging(false)}
-          style={{
-            ...styles.ball,
-            backgroundColor: `${bgColor}`,
-            backgroundImage: `linear-gradient(to bottom, white ${100 - percentSubmerged}%, black ${100 - percentSubmerged}%)`,
-            top: `${y}px`,
-            left: `${x}px`
-          }}
-        />
+    <>
+      <div className={styles.container}>
+        <div className={styles.textContainer}>
+          <h1 className="text-5xl font-extrabold mb-3" style={{fontFamily: "Munro Small"}}>Hello! I'm Andrei.</h1>
+          <p className="text-lg text-gray-600">Welcome to my profile</p>
+        </div>
+        <GlassCard/>
+        <div style={jsStyles.ballContainer}>
+          <div
+            onMouseDown={() => setDragging(true)}
+            onMouseUp={() => setDragging(false)}
+            style={{
+              ...jsStyles.ball,
+              backgroundImage: `linear-gradient(to bottom, #1d1d1d ${100 - percentSubmerged}%, white ${100 - percentSubmerged}%)`,
+              top: `${y}px`,
+              left: `${x}px`,
+            }}
+          >
+            DRAG ME
+          </div>
+        </div>
+        <div className={styles.secretText}>Shhh nothing to see here...</div>
       </div>
-      <div>This is the home page!</div>
-    </div>
+    </>
   )
 }
 
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    backgroundColor: '#022730',
-    backgroundImage: 'linear-gradient(black 50%, white 50%)',
-    height: '100vh',
-    width: '100vw',
+const jsStyles: Record<string, React.CSSProperties> = {
+  ball: {
+    height: `${BALL_RADIUS * 2 * METER_FACTOR}px`,
+    width: `${BALL_RADIUS * 2 * METER_FACTOR}px`,
+    backgroundColor: "black",
+    borderRadius: "100%",
+    position: "absolute",
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent:'center',
+    alignItems: 'center',
+    color: '#ffffff',
+    userSelect: 'none',
+    fontWeight: 'bold'
   },
 
   ballContainer: {
@@ -132,20 +143,6 @@ const styles: Record<string, React.CSSProperties> = {
     width: '100vw',
     transformOrigin: "center",
   },
-
-  ball: {
-    width: `${BALL_RADIUS * 2 * METER_FACTOR}px`,
-    height: `${(BALL_RADIUS * 2 * METER_FACTOR)}px`,
-    backgroundColor: '#dcf9f5',
-    borderRadius: "100%",
-    position: 'absolute',
-  },
-
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
 }
 
 export default Home

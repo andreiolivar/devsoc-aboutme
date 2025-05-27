@@ -1,0 +1,16 @@
+.hideStateButton {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    bottom: 50%;
+    right: 0;
+    padding: 0;
+    margin-right: 15px;
+    display: flex;
+    border: 1px solid #1d1d1d;
+    border-radius: 100%;
+    padding: 15px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
