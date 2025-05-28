@@ -24,8 +24,8 @@ const DRAG_COEFFICIENT = 0.5;
 
 function Home() {
   const AIR_HEIGHT = (window.innerHeight * 0.7)
-  const [x, setX] = useState<number>(0);
-  const [y, setY] = useState<number>(0);
+  const [x, setX] = useState<number>(100);
+  const [y, setY] = useState<number>(100);
   const [dragging, setDragging] = useState<boolean>(false);
   const [velocity, setVelocity] = useState<number>(0);
   const [percentSubmerged, setPercentSubmerged] = useState(0);
@@ -34,6 +34,7 @@ function Home() {
   const xRef = useRef(x);
   const yRef = useRef(y);
   const velocityRef = useRef(velocity);
+  const offsetRef = useRef({ x: 0, y: 0 });
 
   // update refs
   useEffect(() => {
@@ -84,8 +85,8 @@ function Home() {
   useEffect(() => {
     const dragHandler = (event) => {
       if (dragging) {
-        const xPos = event.clientX - (BALL_RADIUS * METER_FACTOR);
-        const yPos = event.clientY - (BALL_RADIUS * METER_FACTOR);
+        const xPos = event.clientX - offsetRef.current.x;
+        const yPos = event.clientY - offsetRef.current.y;
         if (xPos >= 0 && xPos < window.innerWidth - ((BALL_RADIUS * METER_FACTOR) * 2)) setX(xPos);
         if (yPos >= 0 && yPos < window.innerHeight - ((BALL_RADIUS * METER_FACTOR) * 2)) setY(yPos);
       }
@@ -101,10 +102,15 @@ function Home() {
           <h1 className="text-5xl font-extrabold mb-3" style={{fontFamily: "Munro Small"}}>Hello! I'm Andrei.</h1>
           <p className="text-lg text-gray-600">Welcome to my profile</p>
         </div>
-        <GlassCard/>
         <div style={jsStyles.ballContainer}>
           <div
-            onMouseDown={() => setDragging(true)}
+            onMouseDown={(event) => {
+              offsetRef.current = {
+                x: event.clientX - x,
+                y: event.clientY - y,
+              };
+              setDragging(true)
+            }}
             onMouseUp={() => setDragging(false)}
             style={{
               ...jsStyles.ball,
@@ -117,6 +123,7 @@ function Home() {
           </div>
         </div>
         <div className={styles.secretText}>Shhh nothing to see here...</div>
+        <GlassCard/>
       </div>
     </>
   )

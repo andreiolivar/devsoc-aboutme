@@ -18,7 +18,8 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  padding: 15px;
+  padding: 75px;
+  padding-top: 50px;
 }
 
 .mainText {
