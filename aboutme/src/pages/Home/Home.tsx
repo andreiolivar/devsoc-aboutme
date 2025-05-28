@@ -91,16 +91,28 @@ function Home() {
         if (yPos >= 0 && yPos < window.innerHeight - ((BALL_RADIUS * METER_FACTOR) * 2)) setY(yPos);
       }
     }
+    const mobileDragHandler = (event) => {
+      if (dragging) {
+        const xPos = event.touches[0].clientX - offsetRef.current.x;
+        const yPos = event.touches[0].clientY - offsetRef.current.y;
+        if (xPos >= 0 && xPos < window.innerWidth - ((BALL_RADIUS * METER_FACTOR) * 2)) setX(xPos);
+        if (yPos >= 0 && yPos < window.innerHeight - ((BALL_RADIUS * METER_FACTOR) * 2)) setY(yPos);
+      }
+    }
     window.addEventListener("mousemove", dragHandler);
-    return () => window.removeEventListener("mousemove", dragHandler);
+    window.addEventListener("touchmove", mobileDragHandler);
+    return () => {
+      window.removeEventListener("mousemove", dragHandler)
+      window.removeEventListener("touchmove", mobileDragHandler)
+    };
   }, [dragging])
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.textContainer}>
-          <h1 className="text-5xl font-extrabold mb-3" style={{fontFamily: "Munro Small"}}>Hello! I'm Andrei.</h1>
-          <p className="text-lg text-gray-600">Welcome to my profile</p>
+          <h1 className="text-5xl font-extrabold mb-3" style={{fontFamily: "Munro Small"}}>Welcome to my profile!</h1>
+          <p className="text-lg text-gray-600">Open the sidebar to begin.</p>
         </div>
         <div style={jsStyles.ballContainer}>
           <div
@@ -111,6 +123,14 @@ function Home() {
               };
               setDragging(true)
             }}
+            onTouchStart={(event) => {
+              offsetRef.current = {
+                x: event.touches[0].clientX - x,
+                y: event.touches[0].clientY - y,
+              };
+              setDragging(true)
+            }}
+            onTouchEnd={() => setDragging(false)}
             onMouseUp={() => setDragging(false)}
             style={{
               ...jsStyles.ball,
