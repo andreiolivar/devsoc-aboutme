@@ -1,6 +1,12 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-function TabIcon({ source, tooltip, onClick}) {
+type TabIconProps = {
+  source: string;
+  tooltip: string;
+  onClick: () => void;
+}
+
+function TabIcon({ source, tooltip, onClick}: TabIconProps) {
   const [display, setDisplay] = useState(false);
 
   return (

@@ -83,7 +83,7 @@ function Home() {
   }, [dragging])
 
   useEffect(() => {
-    const dragHandler = (event) => {
+    const dragHandler = (event: MouseEvent) => {
       if (dragging) {
         const xPos = event.clientX - offsetRef.current.x;
         const yPos = event.clientY - offsetRef.current.y;
@@ -91,7 +91,7 @@ function Home() {
         if (yPos >= 0 && yPos < window.innerHeight - ((BALL_RADIUS * METER_FACTOR) * 2)) setY(yPos);
       }
     }
-    const mobileDragHandler = (event) => {
+    const mobileDragHandler = (event: TouchEvent) => {
       if (dragging) {
         const xPos = event.touches[0].clientX - offsetRef.current.x;
         const yPos = event.touches[0].clientY - offsetRef.current.y;

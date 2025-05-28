@@ -1,5 +1,3 @@
-import React from 'react'
-
 import ArtWorkA from "../assets/kazamajin4.png";
 import ArtWorkB from "../assets/cat.png";
 import ArtWorkC from "../assets/white.png";

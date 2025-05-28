@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ArrowIcon from "../assets/left-arrow-return-svgrepo-com.svg"
 import AboutMeIcon from "../assets/Interface-Essential-Profile-Male--Streamline-Pixel.svg"
 import HobbiesIcon from "../assets/Content-Files-Pencil-Brush--Streamline-Pixel.svg"
@@ -15,7 +15,7 @@ function GlassCard() {
   const [dragging, setDragging] = useState<boolean>(false);
   const offsetRef = useRef({ x: 0, y: 0 });
   useEffect(() => {
-    const dragHandler = (event) => {
+    const dragHandler = (event: MouseEvent) => {
       if (dragging) {
         const xPos = event.clientX - offsetRef.current.x;
         const yPos = event.clientY - offsetRef.current.y;
@@ -23,7 +23,7 @@ function GlassCard() {
         if (yPos >= 0 && yPos < window.innerHeight - (window.innerHeight * 0.6)) setY(yPos);
       }
     }
-    const mobileDragHandler = (event) => {
+    const mobileDragHandler = (event: TouchEvent) => {
       if (dragging) {
         const xPos = event.touches[0].clientX - offsetRef.current.x;
         const yPos = event.touches[0].clientY - offsetRef.current.y;
